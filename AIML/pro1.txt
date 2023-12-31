@@ -1,0 +1,18 @@
+from heuristicsearch.a_star_search import AStar
+
+print("Graph-1")
+
+heuristic = {'A':1,'B':1,'C':11,'D':1}
+adjance_list = {'A':[('B',1),('C',3),('D',7),],'B':[('D',5 )],'C':[('D',12)]}
+
+graph=AStar(adjance_list,heuristic)
+graph.apply_a_star(start='A',stop='D')
+
+
+**output**
+
+Graph-1
+Path
+A -> B -> D
+Cost
+0 -> 1 -> 6

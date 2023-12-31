@@ -1,0 +1,62 @@
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.cluster import KMeans
+from sklearn import preprocessing
+from sklearn.mixture import GaussianMixture
+import pandas as pd
+import numpy as np
+
+# Load Iris dataset
+iris = datasets.load_iris()
+X = pd.DataFrame(iris.data, columns=['Sepal_Length', 'Sepal_Width', 'Petal_Length', 'Petal_Width'])
+print(type(X))
+y = pd.DataFrame(iris.target, columns=["Targets"])
+
+
+# Build K Means Model
+kmeans_model = KMeans(n_clusters=3)
+kmeans_model.fit(X)
+
+# Visualize the clustering results for K-Means
+plt.figure(figsize=(14, 7))
+colormap = np.array(['red', 'lime', 'black'])
+
+plt.subplot(1, 3, 1)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[y.Targets], s=40, label="Real Clusters")
+plt.title("Real Clusters")
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.legend()
+
+# Plot K-Means classifications
+plt.subplot(1, 3, 2)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[kmeans_model.labels_], s=40, label="K-Means Clustering")
+plt.title("K-Means Clustering")
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.legend()
+
+# Transform data for GMM
+scaler = preprocessing.StandardScaler()
+scaler.fit(X)
+xsa = scaler.transform(X)
+xs = pd.DataFrame(xsa, columns=X.columns)
+
+# Build GMM Model
+gmm = GaussianMixture(n_components=3)
+gmm.fit(xs)
+
+# Visualize the clustering results for GMM
+plt.subplot(1, 3, 3)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[gmm.predict(xs)], s=40, label="GMM Clustering")
+plt.title("GMM Clustering")
+plt.xlabel("Petal Length")
+plt.ylabel("Petal Width")
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+print("Done !! ")
+
+
